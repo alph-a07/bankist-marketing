@@ -6,6 +6,10 @@ const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.getElementById('section--1');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContent = document.querySelectorAll('.operations__content');
+const nav = document.querySelector('.nav');
 
 // ------------ FUNCTIONS ------------
 
@@ -32,6 +36,25 @@ document.querySelector('.nav__links').addEventListener('click', function (event)
         document.querySelector(sectionId).scrollIntoView({ behavior: 'smooth' });
     }
 });
+
+// TABBED OPERATIONS
+tabsContainer.addEventListener('click', function (event) {
+    // closest() to avoid selecting spans
+    const clickedTab = event.target.closest('.operations__tab');
+
+    // GUARD CLAUSE
+    if (!clickedTab) return;
+
+    // Remove active classes for all
+    tabs.forEach(t => t.classList.remove('operations__tab--active'));
+    tabsContent.forEach(c => c.classList.remove('operations__content--active'));
+
+    // Add active classes to clicked tab and corresponding content
+    clickedTab.classList.add('operations__tab--active');
+    document.querySelector(`.operations__content--${clickedTab.dataset.tab}`).classList.add('operations__content--active');
+});
+
+// NAV MENU ANIMATIONS
 
 // ------------ EVENT LISTENERS ------------
 
