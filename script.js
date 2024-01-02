@@ -56,7 +56,7 @@ const stickyNav = function (entries) {
 const navObserver = new IntersectionObserver(stickyNav, { root: null, threshold: 0, rootMargin: `-${navBarHeight}px` });
 navObserver.observe(header);
 
-// LAZY LOADING SECTIONS
+// LAZY LOADING ANIMATION ON SECTIONS
 const lazySections = function (entries, observer) {
     const [entry] = entries;
     console.log(entry);
@@ -73,6 +73,23 @@ document.querySelectorAll('.section').forEach(section => {
     section.classList.add('section--hidden');
     sectionObserver.observe(section);
 });
+
+// LAZY LOADING IMAGES TO IMPROVE PERFORMANCE
+const laztImgs = function (entries, observer) {
+    const [entry] = entries;
+
+    if (!entry.isIntersecting) return;
+
+    entry.target.src = entry.target.dataset.src;
+
+    // Remove the blur filter when the image is loaded, otherwise the low quality image will be visible
+    entry.target.addEventListener('load', () => entry.target.classList.remove('lazy-img'));
+    observer.unobserve(entry.target);
+};
+
+const imgObserver = new IntersectionObserver(laztImgs, { root: null, threshold: 0 });
+
+document.querySelectorAll('img[data-src]').forEach(img => imgObserver.observe(img));
 
 // TABBED OPERATIONS
 tabsContainer.addEventListener('click', function (event) {
