@@ -28,18 +28,6 @@ const closeModal = function () {
     overlay.classList.add('hidden');
 };
 
-//-> Function to handle the opacity of other nav items when one is hovered
-const handleHover = function (event) {
-    if (event.target.classList.contains('nav__link')) {
-        const link = event.target;
-        const siblings = link.closest('.nav__links').querySelectorAll('.nav__link');
-
-        siblings.forEach(l => {
-            if (l !== link) l.style.opacity = this;
-        });
-    }
-};
-
 //-> Callback function for sticky nav implementation using Intersection Observer API
 const stickyNav = function (entries) {
     const [entry] = entries; // Destructuring
@@ -65,6 +53,18 @@ document.querySelector('.nav__links').addEventListener('click', function (event)
 //     else nav.classList.remove('sticky');
 // });
 const navBarHeight = nav.getBoundingClientRect().height;
+
+const handleHover = function (event) {
+    if (event.target.classList.contains('nav__link')) {
+        const link = event.target;
+        const siblings = link.closest('.nav__links').querySelectorAll('.nav__link');
+
+        siblings.forEach(l => {
+            if (l !== link) l.style.opacity = this;
+        });
+    }
+};
+
 const observer = new IntersectionObserver(stickyNav, { root: null, threshold: 0, rootMargin: `-${navBarHeight}px` });
 observer.observe(header);
 
