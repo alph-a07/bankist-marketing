@@ -27,6 +27,18 @@ const closeModal = function () {
     overlay.classList.add('hidden');
 };
 
+//-> Function to handle the opacity of other nav items when one is hovered
+const handleHover = function (event) {
+    if (event.target.classList.contains('nav__link')) {
+        const link = event.target;
+        const siblings = link.closest('.nav__links').querySelectorAll('.nav__link');
+
+        siblings.forEach(l => {
+            if (l !== link) l.style.opacity = this;
+        });
+    }
+};
+
 // PAGE NAVIGATION
 document.querySelector('.nav__links').addEventListener('click', function (event) {
     event.preventDefault();
@@ -55,6 +67,8 @@ tabsContainer.addEventListener('click', function (event) {
 });
 
 // NAV MENU ANIMATIONS
+nav.addEventListener('mouseover', handleHover.bind(0.5));
+nav.addEventListener('mouseout', handleHover.bind(1));
 
 // ------------ EVENT LISTENERS ------------
 
