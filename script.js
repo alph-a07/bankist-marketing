@@ -28,14 +28,6 @@ const closeModal = function () {
     overlay.classList.add('hidden');
 };
 
-//-> Callback function for sticky nav implementation using Intersection Observer API
-const stickyNav = function (entries) {
-    const [entry] = entries; // Destructuring
-
-    if (!entry.isIntersecting) nav.classList.add('sticky');
-    else nav.classList.remove('sticky');
-};
-
 // PAGE NAVIGATION
 document.querySelector('.nav__links').addEventListener('click', function (event) {
     event.preventDefault();
@@ -54,19 +46,33 @@ document.querySelector('.nav__links').addEventListener('click', function (event)
 // });
 const navBarHeight = nav.getBoundingClientRect().height;
 
-const handleHover = function (event) {
-    if (event.target.classList.contains('nav__link')) {
-        const link = event.target;
-        const siblings = link.closest('.nav__links').querySelectorAll('.nav__link');
+const stickyNav = function (entries) {
+    const [entry] = entries; // Destructuring
 
-        siblings.forEach(l => {
-            if (l !== link) l.style.opacity = this;
-        });
-    }
+    if (!entry.isIntersecting) nav.classList.add('sticky');
+    else nav.classList.remove('sticky');
 };
 
-const observer = new IntersectionObserver(stickyNav, { root: null, threshold: 0, rootMargin: `-${navBarHeight}px` });
-observer.observe(header);
+const navObserver = new IntersectionObserver(stickyNav, { root: null, threshold: 0, rootMargin: `-${navBarHeight}px` });
+navObserver.observe(header);
+
+// LAZY LOADING SECTIONS
+const lazySections = function (entries, observer) {
+    const [entry] = entries;
+    console.log(entry);
+
+    if (!entry.isIntersecting) return;
+
+    entry.target.classList.remove('section--hidden');
+    observer.unobserve(entry.target); // Unobserve after loading once
+};
+
+const sectionObserver = new IntersectionObserver(lazySections, { root: null, threshold: 0.15 });
+
+document.querySelectorAll('.section').forEach(section => {
+    section.classList.add('section--hidden');
+    sectionObserver.observe(section);
+});
 
 // TABBED OPERATIONS
 tabsContainer.addEventListener('click', function (event) {
@@ -86,6 +92,16 @@ tabsContainer.addEventListener('click', function (event) {
 });
 
 // NAV MENU ANIMATIONS
+const handleHover = function (event) {
+    if (event.target.classList.contains('nav__link')) {
+        const link = event.target;
+        const siblings = link.closest('.nav__links').querySelectorAll('.nav__link');
+
+        siblings.forEach(l => {
+            if (l !== link) l.style.opacity = this;
+        });
+    }
+};
 nav.addEventListener('mouseover', handleHover.bind(0.5));
 nav.addEventListener('mouseout', handleHover.bind(1));
 
