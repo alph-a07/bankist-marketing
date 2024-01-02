@@ -125,7 +125,11 @@ img {
 /* nav and stickly class at the same time */
 .nav.sticky {
     position: fixed;
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    /* Set the blur radius as needed */
+    -webkit-backdrop-filter: blur(10px);
+    /* For Safari */
 }
 
 .nav__logo {

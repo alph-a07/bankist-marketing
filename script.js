@@ -10,6 +10,7 @@ const tabsContainer = document.querySelector('.operations__tab-container');
 const tabs = document.querySelectorAll('.operations__tab');
 const tabsContent = document.querySelectorAll('.operations__content');
 const nav = document.querySelector('.nav');
+const header = document.querySelector('.header');
 
 // ------------ FUNCTIONS ------------
 
@@ -39,6 +40,14 @@ const handleHover = function (event) {
     }
 };
 
+//-> Callback function for sticky nav implementation using Intersection Observer API
+const stickyNav = function (entries) {
+    const [entry] = entries; // Destructuring
+
+    if (!entry.isIntersecting) nav.classList.add('sticky');
+    else nav.classList.remove('sticky');
+};
+
 // PAGE NAVIGATION
 document.querySelector('.nav__links').addEventListener('click', function (event) {
     event.preventDefault();
@@ -48,6 +57,16 @@ document.querySelector('.nav__links').addEventListener('click', function (event)
         document.querySelector(sectionId).scrollIntoView({ behavior: 'smooth' });
     }
 });
+
+// STICKY NAVIGATION
+// const section1Top = section1.getBoundingClientRect().top;
+// window.addEventListener('scroll', function () {
+//     if (window.scrollY > section1Top) nav.classList.add('sticky');
+//     else nav.classList.remove('sticky');
+// });
+const navBarHeight = nav.getBoundingClientRect().height;
+const observer = new IntersectionObserver(stickyNav, { root: null, threshold: 0, rootMargin: `-${navBarHeight}px` });
+observer.observe(header);
 
 // TABBED OPERATIONS
 tabsContainer.addEventListener('click', function (event) {
